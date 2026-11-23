@@ -433,12 +433,8 @@
             transform-origin: bottom center;
         }
 
-        /* Floating Music Pill */
+        /* Floating Music Pill & Play/Pause Control */
         .music-pill {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            z-index: 60;
             background: rgba(110, 31, 47, 0.92);
             backdrop-filter: blur(8px);
             border: 1px solid #d4af37;
@@ -456,6 +452,10 @@
             border-radius: 2px;
             animation: eqBar 0.9s ease-in-out infinite;
         }
+        .music-paused .eq-bar {
+            animation-play-state: paused;
+            height: 4px !important;
+        }
 
         /* Particle Canvas */
         #fx-canvas {
@@ -469,6 +469,9 @@
     </style>
 </head>
 <body class="book-locked paper-bg">
+
+    <!-- Background Wedding Audio Element -->
+    <audio id="wedding-bgm" src="./music/wedding-song.mp3" loop preload="auto"></audio>
 
     <!-- Hidden Sprite Generator Sources (Rendered once to high-DPI PNG data URLs for smooth mobile performance) -->
     <div id="sprite-cache" class="hidden" aria-hidden="true"></div>
@@ -567,22 +570,43 @@
         <img class="rose-inner rose-sprite-img w-full h-auto" style="animation-delay: -4.2s;" alt="">
     </div>
 
-    <!-- Floating "Our Song" Button (Opens YouTube Link in New Tab) -->
-    <a href="https://youtube.com/shorts/9Jq-VLMMVA0?si=m9wCYzn6AoIQt2ao" 
-       target="_blank" 
-       rel="noopener noreferrer"
-       id="our-song-btn"
-       class="music-pill flex items-center gap-2.5 px-4 py-2.5 rounded-full text-xs font-medium tracking-wider transition transform active:scale-95">
-        <span class="flex items-end gap-[2px] h-3.5" aria-hidden="true">
-            <span class="eq-bar" style="animation-delay: 0s;"></span>
-            <span class="eq-bar" style="animation-delay: 0.3s;"></span>
-            <span class="eq-bar" style="animation-delay: 0.15s;"></span>
-        </span>
-        <span>Our song</span>
-        <svg class="w-3.5 h-3.5 text-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-        </svg>
-    </a>
+    <!-- Floating Audio Controls: Background Music Play/Pause + "Our song" Link -->
+    <div class="fixed bottom-4 right-4 z-[60] flex items-center gap-2">
+        <!-- Background Music Play/Pause Button -->
+        <button id="bgm-toggle-btn"
+                type="button"
+                aria-label="Play or pause background music"
+                title="Play / Pause Music"
+                class="music-pill music-paused flex items-center gap-2 px-3.5 py-2.5 rounded-full text-xs font-medium tracking-wider transition transform active:scale-95">
+            <!-- Play Icon (Shown when paused) -->
+            <svg id="bgm-icon-play" class="w-3.5 h-3.5 text-goldLight" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <!-- Pause Icon (Shown when playing) -->
+            <svg id="bgm-icon-pause" class="w-3.5 h-3.5 text-goldLight hidden" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <!-- Equalizer Bars -->
+            <span class="flex items-end gap-[2px] h-3.5" aria-hidden="true">
+                <span class="eq-bar" style="animation-delay: 0s;"></span>
+                <span class="eq-bar" style="animation-delay: 0.3s;"></span>
+                <span class="eq-bar" style="animation-delay: 0.15s;"></span>
+            </span>
+            <span id="bgm-status-text" class="text-[11px]">Play</span>
+        </button>
+
+        <!-- "Our Song" YouTube Link Pill -->
+        <a href="https://youtube.com/shorts/9Jq-VLMMVA0?si=m9wCYzn6AoIQt2ao" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           id="our-song-btn"
+           class="music-pill flex items-center gap-1.5 px-3.5 py-2.5 rounded-full text-xs font-medium tracking-wider transition transform active:scale-95">
+            <span>Our song</span>
+            <svg class="w-3.5 h-3.5 text-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+        </a>
+    </div>
 
     <!-- =====================================================================
          MAIN CONTINUOUS INVITATION FLOW
@@ -1002,25 +1026,20 @@
             ];
 
             // 4 Romantic Couple Photos for "Our Story" Carousel (Photo #1 also used on Hero)
-            // Note: Uses the user's attached images when available in context, with curated high-res fallbacks
             const STORY_PHOTOS = [
                 {
-                    // Photo #1: Couple smiling warmly in traditional pastel & wine attire
                     url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=85',
                     caption: 'Where every glance turned into a forever promise.'
                 },
                 {
-                    // Photo #2: Couple overlooking misty golden sunrise mountains
                     url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85',
                     caption: 'Chasing sunrises above the clouds, hand in hand.'
                 },
                 {
-                    // Photo #3: Couple in regal cream & maroon beside vintage car
                     url: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=85',
                     caption: 'Two traditions, two hearts, one timeless story.'
                 },
                 {
-                    // Photo #4: Golden sunset beach silhouette
                     url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=85',
                     caption: 'By the golden tide, our greatest adventure begins.'
                 }
@@ -1041,7 +1060,7 @@
             function svgToPngDataUrl(svgString, width, height) {
                 return new Promise((resolve) => {
                     const canvas = document.createElement('canvas');
-                    canvas.width = width * 2; // Retina crispness
+                    canvas.width = width * 2;
                     canvas.height = height * 2;
                     const ctx = canvas.getContext('2d');
                     const img = new Image();
@@ -1080,19 +1099,15 @@
                             <stop offset="100%" stop-color="#3a5233"/>
                         </radialGradient>
                     </defs>
-                    <!-- Leaves -->
                     <path d="M40 155 C10 140, 15 105, 55 115 C65 135, 55 150, 40 155 Z" fill="url(#leafGrad)"/>
                     <path d="M155 45 C185 35, 190 70, 150 80 C140 65, 145 50, 155 45 Z" fill="url(#leafGrad)"/>
                     <path d="M145 155 C175 165, 185 130, 145 120 C135 135, 140 150, 145 155 Z" fill="url(#leafGrad)"/>
-                    <!-- Outer Petals -->
                     <ellipse cx="100" cy="58" rx="48" ry="34" fill="url(#petalOuter)"/>
                     <ellipse cx="142" cy="100" rx="34" ry="48" fill="url(#petalOuter)"/>
                     <ellipse cx="100" cy="142" rx="48" ry="34" fill="url(#petalOuter)"/>
                     <ellipse cx="58" cy="100" rx="34" ry="48" fill="url(#petalOuter)"/>
-                    <!-- Mid Layered Petals -->
                     <path d="M62 72 C80 42, 128 45, 138 78 C148 110, 118 142, 85 135 C55 128, 48 95, 62 72 Z" fill="url(#petalMid)"/>
                     <path d="M72 82 C88 60, 120 65, 126 90 C132 115, 108 132, 86 124 C66 116, 62 98, 72 82 Z" fill="url(#petalOuter)"/>
-                    <!-- Inner Spiral -->
                     <path d="M84 92 C92 78, 112 80, 115 95 C118 109, 102 118, 90 112 C80 107, 79 98, 84 92 Z" fill="url(#petalMid)"/>
                     <circle cx="100" cy="99" r="9" fill="#4a121e"/>
                     <path d="M94 98 C97 92, 106 93, 106 100 C106 106, 97 107, 95 102" fill="none" stroke="#f7c8d0" stroke-width="2" stroke-linecap="round"/>
@@ -1110,21 +1125,15 @@
                             <stop offset="100%" stop-color="#f5df96"/>
                         </linearGradient>
                     </defs>
-                    <!-- Outer Mandala Halo -->
                     <circle cx="60" cy="60" r="52" fill="none" stroke="url(#gGold)" stroke-width="1.5" stroke-dasharray="3 3"/>
                     <circle cx="60" cy="60" r="46" fill="none" stroke="url(#gGold)" stroke-width="1"/>
-                    <!-- Crown (Mukut) -->
                     <path d="M46 34 L60 16 L74 34 Z" fill="url(#gGold)"/>
                     <ellipse cx="60" cy="36" rx="16" ry="4" fill="url(#gGold)"/>
-                    <!-- Tilak -->
                     <path d="M58 41 L62 41 L60 48 Z" fill="#6e1f2f"/>
-                    <!-- Ears -->
                     <path d="M42 42 C24 38, 22 66, 40 66" fill="none" stroke="url(#gGold)" stroke-width="4" stroke-linecap="round"/>
                     <path d="M78 42 C96 38, 98 66, 80 66" fill="none" stroke="url(#gGold)" stroke-width="4" stroke-linecap="round"/>
-                    <!-- Forehead & Trunk curving left -->
                     <path d="M45 44 C52 39, 68 39, 75 44 C76 58, 66 64, 62 72 C58 80, 62 90, 50 92 C42 93, 39 86, 44 82" 
                           fill="none" stroke="url(#gGold)" stroke-width="5.5" stroke-linecap="round"/>
-                    <!-- Base Lotus Curves -->
                     <path d="M36 98 Q60 88 84 98" fill="none" stroke="url(#gGold)" stroke-width="2.5" stroke-linecap="round"/>
                     <circle cx="60" cy="103" r="2.5" fill="url(#gGold)"/>
                 </svg>`;
@@ -1134,18 +1143,14 @@
                 return `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 120">
                     <line x1="20" y1="0" x2="20" y2="112" stroke="#4a6b36" stroke-width="2"/>
-                    <!-- Marigold Flower 1 -->
                     <circle cx="20" cy="22" r="13" fill="#e67e22"/>
                     <circle cx="20" cy="22" r="9.5" fill="#f39c12"/>
                     <circle cx="20" cy="22" r="5.5" fill="#f1c40f"/>
-                    <!-- Marigold Flower 2 -->
                     <circle cx="20" cy="54" r="13" fill="#d35400"/>
                     <circle cx="20" cy="54" r="9.5" fill="#e67e22"/>
                     <circle cx="20" cy="54" r="5.5" fill="#f39c12"/>
-                    <!-- Marigold Flower 3 -->
                     <circle cx="20" cy="86" r="12" fill="#e67e22"/>
                     <circle cx="20" cy="86" r="8.5" fill="#f1c40f"/>
-                    <!-- Bell Tip -->
                     <path d="M13 102 L27 102 L30 114 L10 114 Z" fill="#d4af37"/>
                     <circle cx="20" cy="116" r="3" fill="#6e1f2f"/>
                 </svg>`;
@@ -1187,14 +1192,11 @@
                 if (type === 'pheras') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
                         <rect width="300" height="320" fill="#fdf0ed"/>
-                        <!-- Mandap Pillars & Arch -->
                         <path d="M55 270 L55 100 Q150 40 245 100 L245 270" fill="none" stroke="#6e1f2f" stroke-width="12" opacity="0.25"/>
-                        <!-- Sacred Agni Fire -->
                         <path d="M150 140 C175 180, 185 215, 150 235 C115 215, 125 180, 150 140 Z" fill="#ea580c" opacity="0.4"/>
                         <path d="M150 165 C165 190, 170 212, 150 225 C130 212, 135 190, 150 165 Z" fill="#facc15" opacity="0.55"/>
                     </svg>`;
                 }
-                // Mata Pujan default
                 return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
                     <rect width="300" height="320" fill="#fbf5ea"/>
                     <circle cx="150" cy="145" r="85" fill="#d4af37" opacity="0.22"/>
@@ -1203,7 +1205,6 @@
                 </svg>`;
             }
 
-            // Small Animated Event Icons (Inline SVG)
             function getEventMiniIcon(type) {
                 switch (type) {
                     case 'matapujan':
@@ -1248,7 +1249,6 @@
                 const loaderBar = document.getElementById('loader-bar');
                 loaderBar.style.width = '30%';
 
-                // Generate cached PNGs from vector art once
                 const [rosePng, ganeshPng, marigoldPng, ...scenePngs] = await Promise.all([
                     svgToPngDataUrl(buildRoseSVG(), 200, 200),
                     svgToPngDataUrl(buildGaneshSVG(), 120, 120),
@@ -1263,14 +1263,12 @@
                     Sprites.scenes[ev.sceneType] = scenePngs[idx];
                 });
 
-                // Apply generated sprites across DOM
                 document.querySelectorAll('.rose-sprite-img').forEach((el) => (el.src = Sprites.rose));
                 document.querySelectorAll('.ganesh-sprite-img').forEach((el) => (el.src = Sprites.ganesh));
                 document.querySelectorAll('.marigold-sprite-img').forEach((el) => (el.src = Sprites.marigold));
 
                 loaderBar.style.width = '70%';
 
-                // Wait for Google Fonts & Story Photos (with graceful timeout so it never hangs)
                 const fontPromise = document.fonts ? document.fonts.ready : Promise.resolve();
                 const imagePromises = STORY_PHOTOS.map(
                     (p) =>
@@ -1361,7 +1359,7 @@
                         p.x += p.vx + Math.sin(p.sway) * 0.6;
                         p.y += p.vy;
                         if (p.type === 'confetti') {
-                            p.vy += 0.14; // Gravity
+                            p.vy += 0.14;
                             p.vx *= 0.98;
                         }
                         p.rot += p.vRot;
@@ -1410,34 +1408,83 @@
             })();
 
             // -----------------------------------------------------------------
-            // 5. GENTLE SYNTHESIZED CHIME ON BOOK OPEN (Web Audio API - No External MP3)
+            // 5. BACKGROUND WEDDING MUSIC CONTROLLER (./music/wedding-song.mp3)
             // -----------------------------------------------------------------
-            function playGentleWelcomeChime() {
-                try {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    if (!AudioCtx) return;
-                    const ctx = new AudioCtx();
-                    // Warm Indian Tanpura / Sitar-inspired Major Pentatonic Chord (Sa Pa Ga Sa')
-                    const freqs = [261.63, 329.63, 392.00, 523.25];
-                    freqs.forEach((f, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(f, ctx.currentTime + idx * 0.16);
+            const MusicController = (() => {
+                const audio = document.getElementById('wedding-bgm');
+                const toggleBtn = document.getElementById('bgm-toggle-btn');
+                const playIcon = document.getElementById('bgm-icon-play');
+                const pauseIcon = document.getElementById('bgm-icon-pause');
+                const statusText = document.getElementById('bgm-status-text');
+                const TARGET_VOLUME = 0.35; // 35% initial volume
+                let fadeTimer = null;
 
-                        gain.gain.setValueAtTime(0.0001, ctx.currentTime + idx * 0.16);
-                        gain.gain.exponentialRampToValueAtTime(0.045, ctx.currentTime + idx * 0.16 + 0.35);
-                        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.16 + 2.8);
+                audio.volume = TARGET_VOLUME;
 
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(ctx.currentTime + idx * 0.16);
-                        osc.stop(ctx.currentTime + idx * 0.16 + 2.9);
-                    });
-                } catch (e) {
-                    // Fail silently if blocked by browser policy
+                function syncUI(isPlaying) {
+                    if (isPlaying) {
+                        toggleBtn.classList.remove('music-paused');
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                        statusText.textContent = 'Pause';
+                    } else {
+                        toggleBtn.classList.add('music-paused');
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                        statusText.textContent = 'Play';
+                    }
                 }
-            }
+
+                function startSoftly() {
+                    clearInterval(fadeTimer);
+                    audio.volume = 0.02;
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                syncUI(true);
+                                // Soft fade-in up to 35% volume
+                                fadeTimer = setInterval(() => {
+                                    if (audio.paused) {
+                                        clearInterval(fadeTimer);
+                                        return;
+                                    }
+                                    if (audio.volume + 0.03 >= TARGET_VOLUME) {
+                                        audio.volume = TARGET_VOLUME;
+                                        clearInterval(fadeTimer);
+                                    } else {
+                                        audio.volume = Math.min(TARGET_VOLUME, audio.volume + 0.03);
+                                    }
+                                }, 120);
+                            })
+                            .catch(() => {
+                                // Browser blocked autoplay; user can tap Play button anytime
+                                audio.volume = TARGET_VOLUME;
+                                syncUI(false);
+                            });
+                    }
+                }
+
+                function toggle() {
+                    clearInterval(fadeTimer);
+                    if (audio.paused) {
+                        audio.volume = TARGET_VOLUME;
+                        const p = audio.play();
+                        if (p !== undefined) {
+                            p.then(() => syncUI(true)).catch(() => syncUI(false));
+                        }
+                    } else {
+                        audio.pause();
+                        syncUI(false);
+                    }
+                }
+
+                audio.addEventListener('play', () => syncUI(true));
+                audio.addEventListener('pause', () => syncUI(false));
+                toggleBtn.addEventListener('click', toggle);
+
+                return { startSoftly, toggle };
+            })();
 
             // -----------------------------------------------------------------
             // 6. OPENING 3D BOOK INTERACTION & PARALLAX
@@ -1448,7 +1495,6 @@
                 const tapBtn = document.getElementById('tap-open-btn');
                 let isOpened = false;
 
-                // Subtle touch/pointer parallax on cover roses
                 overlay.addEventListener(
                     'pointermove',
                     (e) => {
@@ -1467,9 +1513,9 @@
                     if (isOpened) return;
                     isOpened = true;
 
-                    // 1. Swing cover open in 3D
+                    // 1. Swing cover open in 3D & start background wedding music softly
                     bookStage.classList.add('opened');
-                    playGentleWelcomeChime();
+                    MusicController.startSoftly();
 
                     // 2. Camera zooms into first page & petals fall
                     setTimeout(() => {
@@ -1543,17 +1589,14 @@
                         pullHint.style.pointerEvents = 'none';
                     }
 
-                    // Petal & Confetti Burst from scroll center
                     const rect = handle.getBoundingClientRect();
                     setTimeout(() => {
                         ParticleFX.spawnBurst(rect.left + rect.width / 2, rect.top, 55);
                     }, 350);
                 }
 
-                // Tap support
                 handle.addEventListener('click', revealScroll);
 
-                // Touch drag downward support
                 handle.addEventListener(
                     'touchstart',
                     (e) => {
@@ -1584,7 +1627,6 @@
                     }
                 });
 
-                // Live Countdown to Monday, 15 February 2027, 7:30 PM IST (+05:30)
                 const targetDate = new Date('2027-02-15T19:30:00+05:30').getTime();
                 const countdownEl = document.getElementById('live-countdown');
 
@@ -1602,7 +1644,6 @@
                 updateCountdown();
                 setInterval(updateCountdown, 1000);
 
-                // Add to Calendar (.ics download)
                 document.getElementById('add-calendar-btn').addEventListener('click', () => {
                     const icsContent = [
                         'BEGIN:VCALENDAR',
@@ -1640,7 +1681,6 @@
                 const total = items.length;
                 let activeIndex = 0;
 
-                // Build cards
                 const cardEls = items.map((item, idx) => {
                     const card = document.createElement('div');
                     card.className = 'carousel-card-item rounded-3xl overflow-hidden shadow-xl border border-champagne/65 bg-ivory';
@@ -1657,7 +1697,6 @@
                     return card;
                 });
 
-                // Build dots
                 const dotEls = items.map((_, idx) => {
                     const dot = document.createElement('button');
                     dot.setAttribute('aria-label', `Slide ${idx + 1}`);
@@ -1714,7 +1753,6 @@
                     updateLayout();
                 }
 
-                // Touch & Mouse Swipe (Strictly one card per swipe)
                 let touchStartX = 0;
                 let touchStartY = 0;
                 let isSwiping = false;
@@ -1760,13 +1798,11 @@
                     cardHeight: 356,
                     renderCardHtml: (ev) => `
                         <div class="relative w-full h-full flex flex-col justify-between p-5 text-center">
-                            <!-- Blurred Illustrated Scene Background -->
                             <img src="${Sprites.scenes[ev.sceneType] || ''}" 
                                  class="absolute inset-0 w-full h-full object-cover blur-[2px] opacity-85 pointer-events-none" 
                                  alt="">
                             <div class="absolute inset-0 bg-ivory/65 pointer-events-none"></div>
 
-                            <!-- Top Icon & Function Name -->
                             <div class="relative z-10 flex flex-col items-center">
                                 <div class="w-12 h-12 rounded-full bg-ivory/90 border border-champagne/70 shadow-sm flex items-center justify-center mb-2.5">
                                     ${getEventMiniIcon(ev.sceneType)}
@@ -1775,14 +1811,12 @@
                                 <div class="w-10 h-[1px] bg-champagne my-2"></div>
                             </div>
 
-                            <!-- Day, Time & Place -->
                             <div class="relative z-10 space-y-1.5 my-auto">
                                 <p class="text-xs font-semibold text-wine tracking-wide">${ev.dayDate}</p>
                                 <p class="text-xs font-medium text-wine/85">${ev.time}</p>
                                 <p class="text-[11px] text-wine/75">${ev.place}</p>
                             </div>
 
-                            <!-- Dress Code Row with Colour Swatch -->
                             <div class="relative z-10 pt-2">
                                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ivory/95 border border-champagne/60 shadow-sm">
                                     <span class="w-3.5 h-3.5 rounded-full border border-wine/30 shrink-0" style="background: ${ev.swatch};"></span>
@@ -1796,7 +1830,6 @@
                 document.getElementById('prev-event-btn').addEventListener('click', eventsCarousel.prev);
                 document.getElementById('next-event-btn').addEventListener('click', eventsCarousel.next);
 
-                // Our Story 3D Photo Carousel
                 create3DCarousel({
                     stageId: 'story-carousel',
                     dotsId: 'story-dots',
@@ -1840,7 +1873,6 @@
                 const copyLabel = document.getElementById('copy-btn-text');
 
                 copyBtn.addEventListener('click', () => {
-                    // Use textarea + execCommand('copy') for reliable iFrame/mobile support
                     const ta = document.createElement('textarea');
                     ta.value = VENUE_ADDRESS;
                     ta.style.position = 'fixed';
@@ -1877,14 +1909,12 @@
                             const delta = Math.max(-18, Math.min(18, currentY - lastScrollY));
                             lastScrollY = currentY;
 
-                            // Parallax corner roses
                             fixedRoses.forEach((rose) => {
                                 const speed = parseFloat(rose.dataset.scrollSpeed || '0.05');
                                 const yShift = Math.sin(currentY * 0.004) * 14 + currentY * speed * 0.12;
                                 rose.style.marginTop = `${yShift}px`;
                             });
 
-                            // Swing hanging marigold strings on scroll
                             marigoldStrands.forEach((strand) => {
                                 const mult = parseFloat(strand.dataset.swing || '1');
                                 const angle = Math.sin(currentY * 0.025) * 6 * mult + delta * 0.35 * mult;
@@ -1899,7 +1929,6 @@
 
                 window.addEventListener('scroll', onScroll, { passive: true });
 
-                // IntersectionObserver for soft blur-in text blocks & pausing off-screen animations
                 const observer = new IntersectionObserver(
                     (entries) => {
                         entries.forEach((entry) => {
