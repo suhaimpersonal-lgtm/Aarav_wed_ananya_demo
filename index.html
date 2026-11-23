@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aarav & Ananya — Wedding Invitation</title>
+    
+    <!-- Google Fonts: Playfair Display & Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: '#6e1f2f',
+                        wineDark: '#4a121e',
+                        blush: '#fcf4f4',
+                        ivory: '#fdfaf6',
+                        champagne: '#d4af37',
+                        goldLight: '#f3e5ab',
+                        goldDark: '#997a15',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Core Styles & Performance Optimizations */
+        :root {
+            --wine: #6e1f2f;
+            --wine-dark: #4a121e;
+            --blush: #fcf4f4;
+            --ivory: #fdfaf6;
+            --champagne: #d4af37;
+            --gold-grad: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: var(--ivory);
+            color: #2c1a1d;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Lock scroll until book opens */
+        body.book-locked {
+            overflow: hidden;
+            height: 100dvh;
+        }
+
+        /* Paper Texture Overlay (Lightweight radial/noise simulation via CSS) */
+        .paper-bg {
+            background-color: var(--ivory);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(252, 244, 244, 0.9) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(110, 31, 47, 0.05) 0%, transparent 60%);
+        }
+
+        /* Metallic Gold Text & Borders */
+        .gold-text {
+            background: linear-gradient(135deg, #997a15 0%, #d4af37 35%, #f5df96 50%, #c59b27 75%, #8a6c11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-grad {
+            border-image: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #aa771c) 1;
+        }
+
+        /* 3D Book Opening Overlay */
+        #book-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: radial-gradient(circle at center, #fff5f6 0%, #f5dfe2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1600px;
+            transition: opacity 0.9s ease, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+            overflow: hidden;
+        }
+
+        #book-overlay.zoom-out {
+            opacity: 0;
+            transform: scale(1.35);
+            pointer-events: none;
+        }
+
+        .book-stage {
+            position: relative;
+            width: min(76vw, 310px);
+            height: min(108vw, 440px);
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Inner page visible right as cover opens */
+        .book-inside-page {
+            position: absolute;
+            inset: 0;
+            background: var(--ivory);
+            border-radius: 4px 14px 14px 4px;
+            box-shadow: inset 12px 0 25px rgba(0,0,0,0.12), 0 20px 45px rgba(74, 18, 30, 0.35);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* 3D Wine Velvet Cover */
+        .book-cover {
+            position: absolute;
+            inset: 0;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 1.3s cubic-bezier(0.35, 0.05, 0.25, 1);
+            border-radius: 4px 14px 14px 4px;
+            background: 
+                radial-gradient(circle at 30% 25%, rgba(155, 48, 69, 0.65) 0%, transparent 60%),
+                linear-gradient(145deg, #7a2234 0%, #5c1624 55%, #3d0c16 100%);
+            box-shadow: 
+                inset 4px 0 10px rgba(255,255,255,0.15),
+                inset -2px 0 8px rgba(0,0,0,0.5),
+                12px 18px 35px rgba(58, 12, 22, 0.45);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+        }
+
+        /* Spine crease */
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 12px;
+            width: 3px;
+            background: linear-gradient(to right, rgba(0,0,0,0.45), rgba(255,255,255,0.12), rgba(0,0,0,0.3));
+        }
+
+        .book-stage.opened .book-cover {
+            transform: rotateY(-165deg);
+        }
+
+        /* Ornate Gold Frame on Book Cover */
+        .cover-gold-frame {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #d4af37;
+            border-radius: 2px 10px 10px 2px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 14px;
+            box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.25);
+        }
+
+        .cover-gold-frame::after {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(243, 229, 171, 0.55);
+            border-radius: 1px 7px 7px 1px;
+            pointer-events: none;
+        }
+
+        /* Parallax Blurred 3D Roses on Cover Screen */
+        .cover-rose-bg {
+            position: absolute;
+            filter: blur(5px);
+            opacity: 0.55;
+            z-index: 1;
+            transition: transform 0.15s ease-out;
+            pointer-events: none;
+        }
+
+        .cover-rose-fg {
+            position: absolute;
+            filter: blur(2.5px);
+            opacity: 0.85;
+            z-index: 20;
+            transition: transform 0.15s ease-out;
+            pointer-events: none;
+        }
+
+        /* Fixed Corner 3D Roses & Hanging Marigolds */
+        .fixed-rose {
+            position: fixed;
+            z-index: 40;
+            pointer-events: none;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        @keyframes roseSway {
+            0%, 100% { transform: rotate(-2deg) scale(1); }
+            50% { transform: rotate(3deg) scale(1.03); }
+        }
+
+        .rose-inner {
+            animation: roseSway 6s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        .marigold-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            z-index: 45;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 6px;
+        }
+
+        .marigold-strand {
+            transform-origin: top center;
+            will-change: transform;
+            transition: transform 0.12s ease-out;
+        }
+
+        /* First Page Arch Frame & Ken Burns Photo */
+        .hero-arch {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            height: 84dvh;
+            max-height: 640px;
+            border-radius: 180px 180px 24px 24px;
+            border: 1.5px solid #d4af37;
+            box-shadow: 0 15px 40px rgba(110, 31, 47, 0.14), inset 0 0 0 5px rgba(253, 250, 246, 0.65);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 18px 16px;
+            background: var(--ivory);
+        }
+
+        .hero-bg-photo {
+            position: absolute;
+            inset: -10%;
+            width: 120%;
+            height: 120%;
+            object-fit: cover;
+            object-position: center 22%;
+            filter: blur(4px) brightness(1.06);
+            opacity: 0.25;
+            animation: slowZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+            z-index: 0;
+        }
+
+        .hero-bg-wash {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(253, 250, 246, 0.72) 15%, rgba(252, 244, 244, 0.92) 95%);
+            z-index: 1;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1) translate3d(0, 0, 0); }
+            100% { transform: scale(1.14) translate3d(-1%, -1%, 0); }
+        }
+
+        /* Letter-by-letter Soft Blur-In Typing */
+        .char-reveal {
+            display: inline-block;
+            opacity: 0;
+            filter: blur(6px);
+            transform: translateY(6px);
+            transition: opacity 0.45s ease, filter 0.45s ease, transform 0.45s ease;
+        }
+
+        .char-reveal.visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* General Section Blur-in Reveal */
+        .reveal-block {
+            opacity: 0;
+            filter: blur(6px);
+            transform: translateY(16px);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-block.in-view {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* Scroll Down Bounce */
+        @keyframes floatDown {
+            0%, 100% { transform: translateY(0); opacity: 0.65; }
+            50% { transform: translateY(7px); opacity: 1; }
+        }
+        .animate-float-down {
+            animation: floatDown 2s ease-in-out infinite;
+        }
+
+        /* Save the Date Scroll Mechanism */
+        .scroll-rod {
+            height: 18px;
+            background: linear-gradient(180deg, #997a15 0%, #fcf6ba 35%, #d4af37 65%, #785d0b 100%);
+            border-radius: 999px;
+            box-shadow: 0 6px 14px rgba(110, 31, 47, 0.25);
+            position: relative;
+            z-index: 15;
+        }
+
+        .scroll-rod::before, .scroll-rod::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            width: 24px;
+            height: 26px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fcf6ba, #b38728 70%, #6e5208);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+        }
+        .scroll-rod::before { left: -10px; }
+        .scroll-rod::after { right: -10px; }
+
+        .scroll-parchment {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+            background: linear-gradient(180deg, #f3e7d3 0%, #fdfaf6 12%, #fdfaf6 88%, #f3e7d3 100%);
+            border-left: 1px solid rgba(212, 175, 55, 0.45);
+            border-right: 1px solid rgba(212, 175, 55, 0.45);
+            box-shadow: 0 12px 30px rgba(110, 31, 47, 0.12);
+        }
+
+        .scroll-parchment.unrolled {
+            max-height: 440px;
+        }
+
+        @keyframes fingerPull {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(16px) scale(0.95); }
+        }
+        .finger-hint {
+            animation: fingerPull 1.6s ease-in-out infinite;
+        }
+
+        /* 3D Swipeable Carousels (Functions & Story) */
+        .carousel-3d-stage {
+            position: relative;
+            width: 100%;
+            perspective: 1100px;
+            touch-action: pan-y;
+            user-select: none;
+        }
+
+        .carousel-card-item {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.52s ease,
+                        filter 0.52s ease;
+            will-change: transform, opacity;
+        }
+
+        /* Reception Sparkles */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(0.7); }
+            50% { opacity: 0.95; transform: scale(1.25); }
+        }
+        .sparkle-dot {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff8dc 0%, #d4af37 70%, transparent 100%);
+            animation: twinkle var(--dur, 3s) ease-in-out infinite;
+            animation-delay: var(--del, 0s);
+            pointer-events: none;
+        }
+
+        /* Animated Map Dash */
+        @keyframes routeDash {
+            to { stroke-dashoffset: -36; }
+        }
+        .map-route-path {
+            stroke-dasharray: 6 6;
+            animation: routeDash 1.8s linear infinite;
+        }
+
+        @keyframes pinBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .map-pin-bounce {
+            animation: pinBounce 1.8s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        /* Floating Music Pill */
+        .music-pill {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 60;
+            background: rgba(110, 31, 47, 0.92);
+            backdrop-filter: blur(8px);
+            border: 1px solid #d4af37;
+            color: #fdfaf6;
+            box-shadow: 0 8px 20px rgba(74, 18, 30, 0.35);
+        }
+
+        @keyframes eqBar {
+            0%, 100% { height: 4px; }
+            50% { height: 13px; }
+        }
+        .eq-bar {
+            width: 2.5px;
+            background: #f3e5ab;
+            border-radius: 2px;
+            animation: eqBar 0.9s ease-in-out infinite;
+        }
+
+        /* Particle Canvas */
+        #fx-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 80;
+        }
+    </style>
+</head>
+<body class="book-locked paper-bg">
+
+    <!-- Hidden Sprite Generator Sources (Rendered once to high-DPI PNG data URLs for smooth mobile performance) -->
+    <div id="sprite-cache" class="hidden" aria-hidden="true"></div>
+
+    <!-- Global Petals & Confetti Particle Canvas -->
+    <canvas id="fx-canvas"></canvas>
+
+    <!-- =====================================================================
+         1. OPENING 3D WINE-VELVET BOOK OVERLAY
+    ====================================================================== -->
+    <div id="book-overlay">
+        <!-- Parallax 3D Roses Behind Book -->
+        <img class="cover-rose-bg rose-sprite-img" data-parallax="-0.06" style="top: 6%; left: -8%; width: 150px;" alt="">
+        <img class="cover-rose-bg rose-sprite-img" data-parallax="0.05" style="bottom: 8%; right: -6%; width: 165px; transform: rotate(140deg);" alt="">
+        <img class="cover-rose-bg rose-sprite-img" data-parallax="-0.04" style="top: 18%; right: -5%; width: 110px; transform: rotate(75deg);" alt="">
+
+        <!-- 3D Book Container -->
+        <div id="book-stage" class="book-stage" role="button" tabindex="0" aria-label="Tap the book to open wedding invitation">
+            <!-- Inside First Page Preview -->
+            <div class="book-inside-page">
+                <img class="ganesh-sprite-img w-14 h-14 mb-2 opacity-90" alt="Lord Ganesha">
+                <p class="font-serif italic text-wine text-sm">॥ श्री गणेशाय नमः ॥</p>
+                <div class="w-16 h-[1px] bg-champagne my-2"></div>
+                <p class="font-serif text-xl text-wine font-semibold">Aarav & Ananya</p>
+                <p class="text-[11px] tracking-widest uppercase text-wine/70 mt-1">15 · 02 · 2027</p>
+            </div>
+
+            <!-- Front Wine-Velvet Cover -->
+            <div class="book-cover">
+                <div class="cover-gold-frame">
+                    <p class="text-[10px] tracking-[0.28em] uppercase text-goldLight/90 font-medium">॥ श्री गणेशाय नमः ॥</p>
+                    
+                    <!-- Gold Ganesh Ji Emblem -->
+                    <div class="flex flex-col items-center my-auto">
+                        <div class="w-24 h-24 rounded-full border border-champagne/60 flex items-center justify-center bg-wineDark/50 shadow-inner mb-4">
+                            <img class="ganesh-sprite-img w-18 h-18" style="width: 72px; height: 72px;" alt="Gold Ganesh Ji Emblem">
+                        </div>
+                        <p class="text-[10px] tracking-[0.25em] uppercase text-goldLight/80 mb-1">Wedding Invitation</p>
+                        <h1 class="font-serif text-3xl gold-text font-bold tracking-wide text-center leading-tight">
+                            Aarav<br><span class="text-xl italic font-normal">&amp;</span><br>Ananya
+                        </h1>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-12 h-[1px] bg-champagne/60 mx-auto mb-2"></div>
+                        <p class="text-[10px] tracking-[0.24em] text-goldLight/90 uppercase">15 February 2027 · Mumbai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parallax 3D Roses In Front of Book -->
+        <img class="cover-rose-fg rose-sprite-img" data-parallax="0.11" style="bottom: 14%; left: -6%; width: 135px; transform: rotate(25deg);" alt="">
+        <img class="cover-rose-fg rose-sprite-img" data-parallax="-0.09" style="top: 10%; right: -7%; width: 125px; transform: rotate(-40deg);" alt="">
+
+        <!-- Loader & Tap Prompt -->
+        <div class="mt-8 z-30 text-center px-6 h-14 flex flex-col items-center justify-center">
+            <div id="loader-box" class="flex flex-col items-center gap-2">
+                <div class="w-36 h-1 bg-wine/15 rounded-full overflow-hidden">
+                    <div id="loader-bar" class="h-full bg-wine w-1/3 transition-all duration-300 rounded-full"></div>
+                </div>
+                <span class="text-[11px] tracking-[0.2em] uppercase text-wine/80 font-medium">Preparing Invitation...</span>
+            </div>
+
+            <button id="tap-open-btn" class="hidden px-6 py-2.5 rounded-full bg-wine text-ivory border border-champagne shadow-lg text-xs tracking-[0.22em] uppercase font-medium animate-pulse active:scale-95 transition">
+                Tap the book to open
+            </button>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         FIXED PARALLAX ROSES & HANGING MARIGOLD STRINGS (Main Page)
+    ====================================================================== -->
+    <!-- Hanging Marigold Strings at Top -->
+    <div id="marigold-bar" class="marigold-bar" aria-hidden="true">
+        <img class="marigold-strand marigold-sprite-img h-14 w-auto" data-swing="1.1" alt="">
+        <img class="marigold-strand marigold-sprite-img h-11 w-auto" data-swing="-0.8" alt="">
+        <img class="marigold-strand marigold-sprite-img h-16 w-auto" data-swing="1.3" alt="">
+        <img class="marigold-strand marigold-sprite-img h-10 w-auto" data-swing="-1.0" alt="">
+        <img class="marigold-strand marigold-sprite-img h-15 w-auto" data-swing="0.9" alt="">
+        <img class="marigold-strand marigold-sprite-img h-12 w-auto" data-swing="-1.2" alt="">
+        <img class="marigold-strand marigold-sprite-img h-14 w-auto" data-swing="1.0" alt="">
+    </div>
+
+    <!-- Fixed 3D Roses at Screen Corners & Edges -->
+    <div class="fixed-rose" data-scroll-speed="0.06" style="top: -26px; left: -28px; width: 112px;">
+        <img class="rose-inner rose-sprite-img w-full h-auto" alt="">
+    </div>
+    <div class="fixed-rose" data-scroll-speed="-0.05" style="top: -22px; right: -28px; width: 108px; transform: scaleX(-1);">
+        <img class="rose-inner rose-sprite-img w-full h-auto" style="animation-delay: -1.5s;" alt="">
+    </div>
+    <div class="fixed-rose" data-scroll-speed="-0.07" style="bottom: -24px; left: -26px; width: 115px; transform: rotate(75deg);">
+        <img class="rose-inner rose-sprite-img w-full h-auto" style="animation-delay: -3s;" alt="">
+    </div>
+    <div class="fixed-rose" data-scroll-speed="0.06" style="bottom: 48px; right: -32px; width: 96px; transform: rotate(-110deg);">
+        <img class="rose-inner rose-sprite-img w-full h-auto" style="animation-delay: -4.2s;" alt="">
+    </div>
+
+    <!-- Floating "Our Song" Button (Opens YouTube Link in New Tab) -->
+    <a href="https://youtube.com/shorts/9Jq-VLMMVA0?si=m9wCYzn6AoIQt2ao" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       id="our-song-btn"
+       class="music-pill flex items-center gap-2.5 px-4 py-2.5 rounded-full text-xs font-medium tracking-wider transition transform active:scale-95">
+        <span class="flex items-end gap-[2px] h-3.5" aria-hidden="true">
+            <span class="eq-bar" style="animation-delay: 0s;"></span>
+            <span class="eq-bar" style="animation-delay: 0.3s;"></span>
+            <span class="eq-bar" style="animation-delay: 0.15s;"></span>
+        </span>
+        <span>Our song</span>
+        <svg class="w-3.5 h-3.5 text-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+    </a>
+
+    <!-- =====================================================================
+         MAIN CONTINUOUS INVITATION FLOW
+    ====================================================================== -->
+    <main id="main-content" class="relative z-10 w-full max-w-md mx-auto">
+
+        <!-- =================================================================
+             2. FIRST PAGE (Exactly 1 Phone Screen High, Centred, Never Cut)
+        ================================================================== -->
+        <section id="hero-section" class="h-[100dvh] w-full flex flex-col items-center justify-center px-5 pt-8 pb-4 relative">
+            <div class="hero-arch">
+                <!-- Photo #1 Soft Blurred Slowly Zooming Background -->
+                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80" 
+                     data-photo-index="0"
+                     class="hero-bg-photo couple-photo-1" 
+                     alt="Aarav and Ananya">
+                <div class="hero-bg-wash"></div>
+
+                <!-- Top Gold Ganesh Ji Medallion -->
+                <div class="relative z-10 flex flex-col items-center mt-1">
+                    <div class="w-14 h-14 rounded-full border border-champagne/80 bg-ivory/90 shadow-sm flex items-center justify-center">
+                        <img class="ganesh-sprite-img w-10 h-10" alt="Gold Ganesh Ji Medallion">
+                    </div>
+                    <p class="text-[9px] tracking-[0.26em] uppercase text-wine/75 mt-1.5 font-medium">॥ श्री गणेशाय नमः ॥</p>
+                </div>
+
+                <!-- Center Couple Names & Lineage -->
+                <div class="relative z-10 flex flex-col items-center text-center my-auto px-2">
+                    <p class="text-[11px] tracking-[0.18em] uppercase text-wine/85 font-medium mb-2">
+                        Together with their families
+                    </p>
+
+                    <!-- Groom Name (Typed Letter by Letter) -->
+                    <h1 id="groom-name-target" class="font-serif text-[2rem] sm:text-[2.25rem] font-bold text-wine leading-tight tracking-wide min-h-[2.6rem]">
+                        Aarav Mehta
+                    </h1>
+                    <p class="text-[11px] text-wine/80 leading-relaxed mt-0.5 font-normal">
+                        Son of <span class="font-medium text-wine">Rajesh Mehta &amp; Sunita Mehta</span>
+                    </p>
+
+                    <!-- Ampersand -->
+                    <div class="my-2 flex items-center gap-3">
+                        <span class="w-8 h-[1px] bg-champagne/70"></span>
+                        <span class="font-serif italic text-2xl gold-text font-semibold">&amp;</span>
+                        <span class="w-8 h-[1px] bg-champagne/70"></span>
+                    </div>
+
+                    <!-- Bride Name (Typed Letter by Letter) -->
+                    <h2 id="bride-name-target" class="font-serif text-[2rem] sm:text-[2.25rem] font-bold text-wine leading-tight tracking-wide min-h-[2.6rem]">
+                        Ananya Shah
+                    </h2>
+                    <p class="text-[11px] text-wine/80 leading-relaxed mt-0.5 font-normal">
+                        Daughter of <span class="font-medium text-wine">Amit Shah &amp; Neeta Shah</span>
+                    </p>
+
+                    <!-- Invite Line -->
+                    <p class="font-serif italic text-sm text-wine/90 mt-3.5 max-w-[255px] leading-snug">
+                        joyfully invite you to share in the celebration of their wedding
+                    </p>
+                </div>
+
+                <!-- Animated Scroll-Down Arrow -->
+                <a href="#save-the-date" aria-label="Scroll down" class="relative z-10 flex flex-col items-center text-wine/80 animate-float-down pb-1">
+                    <span class="text-[9px] tracking-[0.22em] uppercase mb-0.5">Scroll</span>
+                    <svg class="w-5 h-5 text-champagne" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             3. SAVE THE DATE — PULL TO REVEAL SCROLL
+        ================================================================== -->
+        <section id="save-the-date" class="py-14 px-6 flex flex-col items-center text-center reveal-block">
+            <p class="text-[10px] tracking-[0.28em] uppercase text-champagne font-semibold mb-1">Auspicious Beginning</p>
+            <h2 class="font-serif text-3xl text-wine font-semibold mb-6">Save the Date</h2>
+
+            <!-- Golden Rod & Scroll Assembly -->
+            <div class="w-full max-w-[330px] relative">
+                <!-- Top Golden Rod -->
+                <div class="scroll-rod w-full"></div>
+
+                <!-- Unrolling Parchment Body -->
+                <div id="scroll-parchment" class="scroll-parchment mx-2 relative">
+                    <div class="p-5 m-2.5 border border-champagne/75 rounded-lg relative bg-ivory/70">
+                        <!-- Rose Corners inside Scroll -->
+                        <img class="rose-sprite-img w-10 h-10 absolute -top-3 -left-3 opacity-85" alt="">
+                        <img class="rose-sprite-img w-10 h-10 absolute -top-3 -right-3 opacity-85 transform scale-x-[-1]" alt="">
+                        <img class="rose-sprite-img w-10 h-10 absolute -bottom-3 -left-3 opacity-85 transform rotate-90" alt="">
+                        <img class="rose-sprite-img w-10 h-10 absolute -bottom-3 -right-3 opacity-85 transform -rotate-90" alt="">
+
+                        <img class="ganesh-sprite-img w-10 h-10 mx-auto mb-2" alt="Ganesh Ji">
+                        <p class="text-[10px] tracking-[0.24em] uppercase text-wine/70">The Wedding Ceremony</p>
+                        <p class="font-serif text-2xl font-bold text-wine mt-1">Monday, 15 February 2027</p>
+                        <div class="w-14 h-[1px] bg-champagne mx-auto my-2.5"></div>
+                        <p class="text-xs font-medium text-wine tracking-wide">Pheras at 7:30 PM</p>
+                        <p class="text-[11px] text-wine/75 mt-1">The St. Regis Mumbai, Lower Parel</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Golden Rod + Hanging Tassel Pull Handle -->
+                <div id="scroll-handle" class="cursor-grab active:cursor-grabbing select-none touch-none">
+                    <div class="scroll-rod w-full"></div>
+                    
+                    <!-- Tassel & Animated Finger Prompt -->
+                    <div id="tassel-prompt" class="flex flex-col items-center -mt-0.5">
+                        <!-- Gold Cord & Tassel SVG -->
+                        <svg width="36" height="58" viewBox="0 0 36 58" class="drop-shadow">
+                            <line x1="18" y1="0" x2="18" y2="22" stroke="#b38728" stroke-width="2.5"/>
+                            <circle cx="18" cy="24" r="4.5" fill="#d4af37" stroke="#8a6c11" stroke-width="1"/>
+                            <path d="M13 28 L23 28 L26 54 L10 54 Z" fill="url(#tasselGrad)"/>
+                            <line x1="14" y1="30" x2="12" y2="53" stroke="#8a6c11" stroke-width="0.8"/>
+                            <line x1="18" y1="30" x2="18" y2="53" stroke="#8a6c11" stroke-width="0.8"/>
+                            <line x1="22" y1="30" x2="24" y2="53" stroke="#8a6c11" stroke-width="0.8"/>
+                            <defs>
+                                <linearGradient id="tasselGrad" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#997a15"/>
+                                    <stop offset="50%" stop-color="#f5df96"/>
+                                    <stop offset="100%" stop-color="#997a15"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <!-- Animated Finger Hint -->
+                        <div id="pull-hint-label" class="flex items-center gap-1.5 mt-1 text-wine/85 finger-hint">
+                            <svg class="w-4 h-4 text-wine" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 11.24V7.5a2.5 2.5 0 0 1 5 0v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/>
+                            </svg>
+                            <span class="text-[11px] tracking-[0.18em] uppercase font-medium">Pull or tap tassel to reveal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- One-Line Live Countdown -->
+            <div class="mt-7 w-full max-w-[330px] py-3 px-4 rounded-2xl bg-blush/90 border border-champagne/45 shadow-sm">
+                <p id="live-countdown" class="font-serif text-base sm:text-lg text-wine font-semibold tracking-wide">
+                    00d · 00h · 00m · 00s
+                </p>
+            </div>
+
+            <!-- Add to Calendar Button -->
+            <button id="add-calendar-btn" class="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-wine text-ivory text-xs tracking-[0.18em] uppercase font-medium shadow-md border border-champagne/60 active:scale-95 transition">
+                <svg class="w-4 h-4 text-goldLight" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Add to calendar</span>
+            </button>
+        </section>
+
+        <!-- =================================================================
+             4. WEDDING FESTIVITIES — SWIPEABLE 3D CARD CAROUSEL
+        ================================================================== -->
+        <section id="festivities-section" class="py-12 px-4 flex flex-col items-center reveal-block">
+            <p class="text-[10px] tracking-[0.28em] uppercase text-champagne font-semibold mb-1">Celebrations</p>
+            <h2 class="font-serif text-3xl text-wine font-semibold text-center mb-2">Wedding Festivities</h2>
+            <p class="text-[11px] text-wine/70 tracking-wider mb-6">Swipe left or right to explore events</p>
+
+            <!-- 3D Carousel Stage -->
+            <div id="events-carousel" class="carousel-3d-stage h-[365px] max-w-[390px] mx-auto">
+                <!-- Cards injected via JS -->
+            </div>
+
+            <!-- Navigation Dots & Arrows -->
+            <div class="flex items-center gap-4 mt-4">
+                <button id="prev-event-btn" aria-label="Previous event" class="w-9 h-9 rounded-full border border-champagne/60 bg-ivory text-wine flex items-center justify-center shadow-sm active:scale-90 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <div id="events-dots" class="flex items-center gap-2"></div>
+                <button id="next-event-btn" aria-label="Next event" class="w-9 h-9 rounded-full border border-champagne/60 bg-ivory text-wine flex items-center justify-center shadow-sm active:scale-90 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             5. OUR STORY — SWIPEABLE 3D PHOTO CAROUSEL
+        ================================================================== -->
+        <section id="our-story-section" class="py-12 px-4 flex flex-col items-center reveal-block">
+            <p class="text-[10px] tracking-[0.28em] uppercase text-champagne font-semibold mb-1">Two Souls, One Journey</p>
+            <h2 class="font-serif text-3xl text-wine font-semibold text-center mb-6">Our Story</h2>
+
+            <!-- 3D Photo Carousel Stage -->
+            <div id="story-carousel" class="carousel-3d-stage h-[390px] max-w-[390px] mx-auto">
+                <!-- Photo cards injected via JS -->
+            </div>
+
+            <!-- Story Dots -->
+            <div id="story-dots" class="flex items-center gap-2.5 mt-4"></div>
+        </section>
+
+        <!-- =================================================================
+             6. GRAND RECEPTION — DEEP WINE CARD WITH SPARKLES & ROSES
+        ================================================================== -->
+        <section id="reception-section" class="py-12 px-5 flex flex-col items-center reveal-block">
+            <div class="relative w-full max-w-[360px] rounded-3xl bg-gradient-to-br from-wine via-wineDark to-[#330912] p-7 text-center text-ivory shadow-2xl border border-champagne/75 overflow-hidden">
+                <!-- Inner Gold Line -->
+                <div class="absolute inset-2.5 rounded-2xl border border-champagne/35 pointer-events-none"></div>
+
+                <!-- Sparkle Elements -->
+                <span class="sparkle-dot w-1.5 h-1.5" style="top: 16%; left: 18%; --dur: 2.6s; --del: 0.2s;"></span>
+                <span class="sparkle-dot w-2 h-2" style="top: 24%; right: 16%; --dur: 3.2s; --del: 0.8s;"></span>
+                <span class="sparkle-dot w-1.5 h-1.5" style="bottom: 22%; left: 22%; --dur: 2.9s; --del: 1.1s;"></span>
+                <span class="sparkle-dot w-2 h-2" style="bottom: 18%; right: 20%; --dur: 3.5s; --del: 0.4s;"></span>
+                <span class="sparkle-dot w-1 h-1" style="top: 50%; left: 12%; --dur: 2.4s; --del: 1.5s;"></span>
+                <span class="sparkle-dot w-1 h-1" style="top: 46%; right: 12%; --dur: 2.8s; --del: 0.7s;"></span>
+
+                <!-- Blooming Roses in Two Opposite Corners -->
+                <img class="rose-sprite-img rose-inner w-20 h-20 absolute -top-4 -left-4 pointer-events-none drop-shadow-lg" alt="">
+                <img class="rose-sprite-img rose-inner w-20 h-20 absolute -bottom-4 -right-4 pointer-events-none drop-shadow-lg transform rotate-180" style="animation-delay: -2s;" alt="">
+
+                <p class="text-[10px] tracking-[0.3em] uppercase text-goldLight/85 font-medium mb-2 relative z-10">An Evening of Elegance</p>
+                <h2 class="font-serif text-3xl gold-text font-bold mb-3 relative z-10">Grand Reception</h2>
+
+                <div class="w-16 h-[1px] bg-champagne/60 mx-auto my-3 relative z-10"></div>
+
+                <p class="font-serif text-xl text-goldLight font-semibold relative z-10">Tuesday, 16 February 2027</p>
+                <p class="text-xs tracking-[0.2em] uppercase text-ivory/90 mt-1.5 relative z-10">7:00 PM Onwards</p>
+                <p class="text-xs text-ivory/80 mt-2 relative z-10">The St. Regis Mumbai</p>
+
+                <!-- Dress Code Swatch Pill -->
+                <div class="mt-5 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/35 border border-champagne/50 relative z-10">
+                    <span class="w-3.5 h-3.5 rounded-full border border-champagne" style="background: linear-gradient(135deg, #111111 50%, #d4af37 50%);"></span>
+                    <span class="text-[11px] tracking-wider text-goldLight">Dress Code: Black &amp; Gold</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             7. LOCATION — ILLUSTRATED MAP CARD & ACTIONS
+        ================================================================== -->
+        <section id="location-section" class="py-12 px-5 flex flex-col items-center text-center reveal-block">
+            <p class="text-[10px] tracking-[0.28em] uppercase text-champagne font-semibold mb-1">Venue</p>
+            <h2 class="font-serif text-3xl text-wine font-semibold mb-2">The St. Regis Mumbai</h2>
+            <p class="text-xs text-wine/80 max-w-[290px] leading-relaxed mb-5">
+                462 Senapati Bapat Marg, Lower Parel, Mumbai, Maharashtra 400013
+            </p>
+
+            <!-- Tappable Illustrated Map Card -->
+            <a href="https://www.google.com/maps/search/?api=1&query=The+St+Regis+Mumbai+462+Senapati+Bapat+Marg+Lower+Parel+Mumbai"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Open The St. Regis Mumbai in Google Maps"
+               class="block w-full max-w-[350px] rounded-2xl overflow-hidden border border-champagne/70 shadow-lg bg-ivory relative group">
+                
+                <!-- Custom Illustrated Mumbai Lower Parel Map SVG -->
+                <svg viewBox="0 0 360 200" class="w-full h-auto block bg-[#f9f1e6]">
+                    <!-- Soft City Blocks -->
+                    <rect x="0" y="0" width="360" height="200" fill="#f9f2e7"/>
+                    <path d="M0 40 L140 40 L140 110 L0 110 Z" fill="#f2e5d5"/>
+                    <path d="M185 20 L360 20 L360 95 L185 95 Z" fill="#f2e5d5"/>
+                    <path d="M30 135 L165 135 L165 200 L30 200 Z" fill="#f2e5d5"/>
+                    <path d="M210 125 L340 125 L340 190 L210 190 Z" fill="#e8efe4"/>
+
+                    <!-- Arabian Sea Coast hint on left -->
+                    <path d="M0 0 Q 25 100 10 200 L0 200 Z" fill="#dbe9ee"/>
+
+                    <!-- Roads -->
+                    <path d="M162 0 L162 200" stroke="#ffffff" stroke-width="14"/>
+                    <path d="M162 0 L162 200" stroke="#e2d2bc" stroke-width="1"/>
+                    <path d="M0 115 L360 115" stroke="#ffffff" stroke-width="12"/>
+                    <path d="M0 115 L360 115" stroke="#e2d2bc" stroke-width="1"/>
+                    <path d="M40 200 Q 120 140 255 68" stroke="#ffffff" stroke-width="9" fill="none"/>
+
+                    <!-- Road Labels -->
+                    <text x="166" y="182" fill="#8c6d53" font-size="7.5" font-family="Montserrat" transform="rotate(-90 166 182)" letter-spacing="1.2">SENAPATI BAPAT MARG</text>
+                    <text x="22" y="112" fill="#8c6d53" font-size="7" font-family="Montserrat" letter-spacing="1">LOWER PAREL</text>
+
+                    <!-- Animated Route Path -->
+                    <path d="M45 182 Q 115 145 162 115 T 255 68" 
+                          fill="none" 
+                          stroke="#6e1f2f" 
+                          stroke-width="3" 
+                          stroke-linecap="round" 
+                          class="map-route-path"/>
+
+                    <!-- Origin Dot -->
+                    <circle cx="45" cy="182" r="5" fill="#d4af37" stroke="#6e1f2f" stroke-width="2"/>
+
+                    <!-- Venue Building Badge -->
+                    <rect x="215" y="76" width="84" height="22" rx="11" fill="#6e1f2f"/>
+                    <text x="257" y="90" text-anchor="middle" fill="#fdfaf6" font-size="8" font-family="Playfair Display" font-weight="600">The St. Regis</text>
+
+                    <!-- Animated Wine & Gold Pin -->
+                    <g class="map-pin-bounce">
+                        <ellipse cx="255" cy="70" rx="8" ry="3" fill="rgba(110,31,47,0.25)"/>
+                        <path d="M255 24 C244 24 236 32 236 42 C236 55 255 69 255 69 C255 69 274 55 274 42 C274 32 266 24 255 24 Z" fill="#6e1f2f" stroke="#d4af37" stroke-width="2"/>
+                        <circle cx="255" cy="42" r="6" fill="#fcf6ba"/>
+                    </g>
+                </svg>
+
+                <div class="bg-ivory/95 px-4 py-2 border-t border-champagne/30 flex items-center justify-between text-[11px] text-wine font-medium">
+                    <span>Tap map to open in Google Maps</span>
+                    <span class="text-champagne">↗</span>
+                </div>
+            </a>
+
+            <!-- Action Buttons: Get Directions & Copy Address -->
+            <div class="flex items-center justify-center gap-3 mt-5 w-full max-w-[350px]">
+                <a href="https://www.google.com/maps/search/?api=1&query=The+St+Regis+Mumbai+462+Senapati+Bapat+Marg+Lower+Parel+Mumbai"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="flex-1 py-2.5 px-4 rounded-full bg-wine text-ivory text-xs tracking-wider uppercase font-medium shadow-md border border-champagne/60 flex items-center justify-center gap-1.5 active:scale-95 transition">
+                    <svg class="w-3.5 h-3.5 text-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Get directions</span>
+                </a>
+
+                <button id="copy-address-btn" class="flex-1 py-2.5 px-4 rounded-full bg-ivory text-wine text-xs tracking-wider uppercase font-medium shadow-sm border border-wine/40 flex items-center justify-center gap-1.5 active:scale-95 transition">
+                    <svg class="w-3.5 h-3.5 text-wine" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                    </svg>
+                    <span id="copy-btn-text">Copy address</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             8. CLOSING SECTION
+        ================================================================== -->
+        <footer id="closing-section" class="pt-10 pb-24 px-6 flex flex-col items-center text-center reveal-block">
+            <div class="w-24 h-[1px] bg-gradient-to-r from-transparent via-champagne to-transparent mb-6"></div>
+            
+            <img class="ganesh-sprite-img w-12 h-12 mb-3" alt="Lord Ganesha">
+            
+            <h2 class="font-serif italic text-2xl sm:text-3xl text-wine leading-snug max-w-[290px]">
+                We can’t wait to celebrate with you
+            </h2>
+
+            <div class="w-12 h-[1px] bg-champagne/60 my-4"></div>
+
+            <p class="text-xs tracking-[0.2em] uppercase text-wine/85 font-semibold">
+                With love, the Mehta &amp; Shah families
+            </p>
+            <p class="font-serif italic text-sm text-wine/70 mt-2">
+                Aarav &amp; Ananya · 15.02.2027
+            </p>
+        </footer>
+    </main>
+
+    <!-- Toast Notification Box (No alert() used) -->
+    <div id="toast-msg" class="fixed top-20 left-1/2 -translate-x-1/2 z-[120] px-5 py-2.5 rounded-full bg-wine text-ivory text-xs tracking-wider shadow-xl border border-champagne opacity-0 pointer-events-none transition-opacity duration-300">
+        Address copied to clipboard
+    </div>
+
+    <script>
+        /**
+         * =====================================================================
+         * AARAV & ANANYA INTERACTIVE WEDDING INVITATION ENGINE
+         * Engineered for smooth 60fps mobile performance on Android & iOS
+         * =====================================================================
+         */
+        (function () {
+            'use strict';
+
+            // -----------------------------------------------------------------
+            // 1. DATA CONFIGURATION (Events, Photos, Venue)
+            // -----------------------------------------------------------------
+            const EVENTS_DATA = [
+                {
+                    name: 'Mata Pujan',
+                    dayDate: 'Saturday, 13 February 2027',
+                    time: '9:00 AM',
+                    place: 'The St. Regis Mumbai',
+                    dressCode: 'Traditional',
+                    colourName: 'Beige',
+                    swatch: '#e3d2b4',
+                    sceneType: 'matapujan'
+                },
+                {
+                    name: 'Haldi',
+                    dayDate: 'Saturday, 13 February 2027',
+                    time: '11:00 AM',
+                    place: 'The St. Regis Mumbai',
+                    dressCode: 'Wear yellow',
+                    colourName: 'Yellow',
+                    swatch: '#f4c430',
+                    sceneType: 'haldi'
+                },
+                {
+                    name: 'Mehendi',
+                    dayDate: 'Saturday, 13 February 2027',
+                    time: '5:00 PM',
+                    place: 'The St. Regis Mumbai',
+                    dressCode: 'Wear green',
+                    colourName: 'Green',
+                    swatch: '#2e6f40',
+                    sceneType: 'mehendi'
+                },
+                {
+                    name: 'Sangeet',
+                    dayDate: 'Sunday, 14 February 2027',
+                    time: '7:00 PM',
+                    place: 'The St. Regis Mumbai',
+                    dressCode: 'Indo-western',
+                    colourName: 'Purple & Pink',
+                    swatch: 'linear-gradient(135deg, #6b21a8 50%, #ec4899 50%)',
+                    sceneType: 'sangeet'
+                },
+                {
+                    name: 'Baraat & Pheras',
+                    dayDate: 'Monday, 15 February 2027',
+                    time: '6:30 PM onwards (Pheras at 7:30 PM)',
+                    place: 'The St. Regis Mumbai',
+                    dressCode: 'Festive',
+                    colourName: 'Red & Gold',
+                    swatch: 'linear-gradient(135deg, #8b1e2f 50%, #d4af37 50%)',
+                    sceneType: 'pheras'
+                }
+            ];
+
+            // 4 Romantic Couple Photos for "Our Story" Carousel (Photo #1 also used on Hero)
+            // Note: Uses the user's attached images when available in context, with curated high-res fallbacks
+            const STORY_PHOTOS = [
+                {
+                    // Photo #1: Couple smiling warmly in traditional pastel & wine attire
+                    url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=85',
+                    caption: 'Where every glance turned into a forever promise.'
+                },
+                {
+                    // Photo #2: Couple overlooking misty golden sunrise mountains
+                    url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85',
+                    caption: 'Chasing sunrises above the clouds, hand in hand.'
+                },
+                {
+                    // Photo #3: Couple in regal cream & maroon beside vintage car
+                    url: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=85',
+                    caption: 'Two traditions, two hearts, one timeless story.'
+                },
+                {
+                    // Photo #4: Golden sunset beach silhouette
+                    url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=85',
+                    caption: 'By the golden tide, our greatest adventure begins.'
+                }
+            ];
+
+            const VENUE_ADDRESS = 'The St. Regis Mumbai, 462 Senapati Bapat Marg, Lower Parel, Mumbai, Maharashtra 400013';
+
+            // -----------------------------------------------------------------
+            // 2. PRE-RENDERED VECTOR SPRITES (Rendered once to PNG for 60fps)
+            // -----------------------------------------------------------------
+            const Sprites = {
+                rose: '',
+                ganesh: '',
+                marigold: '',
+                scenes: {}
+            };
+
+            function svgToPngDataUrl(svgString, width, height) {
+                return new Promise((resolve) => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width * 2; // Retina crispness
+                    canvas.height = height * 2;
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+
+                    img.onload = () => {
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        URL.revokeObjectURL(url);
+                        resolve(canvas.toDataURL('image/png'));
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        resolve(url);
+                    };
+                    img.src = url;
+                });
+            }
+
+            function buildRoseSVG() {
+                return `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                    <defs>
+                        <radialGradient id="petalOuter" cx="40%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="#f7c8d0"/>
+                            <stop offset="55%" stop-color="#c96b7e"/>
+                            <stop offset="100%" stop-color="#6e1f2f"/>
+                        </radialGradient>
+                        <radialGradient id="petalMid" cx="45%" cy="40%" r="60%">
+                            <stop offset="0%" stop-color="#ffe0e6"/>
+                            <stop offset="60%" stop-color="#b84a62"/>
+                            <stop offset="100%" stop-color="#581422"/>
+                        </radialGradient>
+                        <radialGradient id="leafGrad" cx="30%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#7c9a6e"/>
+                            <stop offset="100%" stop-color="#3a5233"/>
+                        </radialGradient>
+                    </defs>
+                    <!-- Leaves -->
+                    <path d="M40 155 C10 140, 15 105, 55 115 C65 135, 55 150, 40 155 Z" fill="url(#leafGrad)"/>
+                    <path d="M155 45 C185 35, 190 70, 150 80 C140 65, 145 50, 155 45 Z" fill="url(#leafGrad)"/>
+                    <path d="M145 155 C175 165, 185 130, 145 120 C135 135, 140 150, 145 155 Z" fill="url(#leafGrad)"/>
+                    <!-- Outer Petals -->
+                    <ellipse cx="100" cy="58" rx="48" ry="34" fill="url(#petalOuter)"/>
+                    <ellipse cx="142" cy="100" rx="34" ry="48" fill="url(#petalOuter)"/>
+                    <ellipse cx="100" cy="142" rx="48" ry="34" fill="url(#petalOuter)"/>
+                    <ellipse cx="58" cy="100" rx="34" ry="48" fill="url(#petalOuter)"/>
+                    <!-- Mid Layered Petals -->
+                    <path d="M62 72 C80 42, 128 45, 138 78 C148 110, 118 142, 85 135 C55 128, 48 95, 62 72 Z" fill="url(#petalMid)"/>
+                    <path d="M72 82 C88 60, 120 65, 126 90 C132 115, 108 132, 86 124 C66 116, 62 98, 72 82 Z" fill="url(#petalOuter)"/>
+                    <!-- Inner Spiral -->
+                    <path d="M84 92 C92 78, 112 80, 115 95 C118 109, 102 118, 90 112 C80 107, 79 98, 84 92 Z" fill="url(#petalMid)"/>
+                    <circle cx="100" cy="99" r="9" fill="#4a121e"/>
+                    <path d="M94 98 C97 92, 106 93, 106 100 C106 106, 97 107, 95 102" fill="none" stroke="#f7c8d0" stroke-width="2" stroke-linecap="round"/>
+                </svg>`;
+            }
+
+            function buildGaneshSVG() {
+                return `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <defs>
+                        <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fcf6ba"/>
+                            <stop offset="40%" stop-color="#d4af37"/>
+                            <stop offset="80%" stop-color="#997a15"/>
+                            <stop offset="100%" stop-color="#f5df96"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Outer Mandala Halo -->
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="url(#gGold)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    <circle cx="60" cy="60" r="46" fill="none" stroke="url(#gGold)" stroke-width="1"/>
+                    <!-- Crown (Mukut) -->
+                    <path d="M46 34 L60 16 L74 34 Z" fill="url(#gGold)"/>
+                    <ellipse cx="60" cy="36" rx="16" ry="4" fill="url(#gGold)"/>
+                    <!-- Tilak -->
+                    <path d="M58 41 L62 41 L60 48 Z" fill="#6e1f2f"/>
+                    <!-- Ears -->
+                    <path d="M42 42 C24 38, 22 66, 40 66" fill="none" stroke="url(#gGold)" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M78 42 C96 38, 98 66, 80 66" fill="none" stroke="url(#gGold)" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Forehead & Trunk curving left -->
+                    <path d="M45 44 C52 39, 68 39, 75 44 C76 58, 66 64, 62 72 C58 80, 62 90, 50 92 C42 93, 39 86, 44 82" 
+                          fill="none" stroke="url(#gGold)" stroke-width="5.5" stroke-linecap="round"/>
+                    <!-- Base Lotus Curves -->
+                    <path d="M36 98 Q60 88 84 98" fill="none" stroke="url(#gGold)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="60" cy="103" r="2.5" fill="url(#gGold)"/>
+                </svg>`;
+            }
+
+            function buildMarigoldSVG() {
+                return `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 120">
+                    <line x1="20" y1="0" x2="20" y2="112" stroke="#4a6b36" stroke-width="2"/>
+                    <!-- Marigold Flower 1 -->
+                    <circle cx="20" cy="22" r="13" fill="#e67e22"/>
+                    <circle cx="20" cy="22" r="9.5" fill="#f39c12"/>
+                    <circle cx="20" cy="22" r="5.5" fill="#f1c40f"/>
+                    <!-- Marigold Flower 2 -->
+                    <circle cx="20" cy="54" r="13" fill="#d35400"/>
+                    <circle cx="20" cy="54" r="9.5" fill="#e67e22"/>
+                    <circle cx="20" cy="54" r="5.5" fill="#f39c12"/>
+                    <!-- Marigold Flower 3 -->
+                    <circle cx="20" cy="86" r="12" fill="#e67e22"/>
+                    <circle cx="20" cy="86" r="8.5" fill="#f1c40f"/>
+                    <!-- Bell Tip -->
+                    <path d="M13 102 L27 102 L30 114 L10 114 Z" fill="#d4af37"/>
+                    <circle cx="20" cy="116" r="3" fill="#6e1f2f"/>
+                </svg>`;
+            }
+
+            function buildSceneSVG(type) {
+                if (type === 'haldi') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
+                        <rect width="300" height="320" fill="#fef5d4"/>
+                        <circle cx="60" cy="60" r="45" fill="#f59e0b" opacity="0.45"/>
+                        <circle cx="240" cy="80" r="55" fill="#fbbf24" opacity="0.5"/>
+                        <circle cx="150" cy="160" r="85" fill="#f59e0b" opacity="0.3"/>
+                        <circle cx="80" cy="250" r="50" fill="#d97706" opacity="0.35"/>
+                        <circle cx="230" cy="240" r="48" fill="#fbbf24" opacity="0.45"/>
+                    </svg>`;
+                }
+                if (type === 'mehendi') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
+                        <rect width="300" height="320" fill="#e8f5e9"/>
+                        <circle cx="150" cy="155" r="95" fill="none" stroke="#2e6f40" stroke-width="6" stroke-dasharray="10 8" opacity="0.35"/>
+                        <circle cx="150" cy="155" r="65" fill="none" stroke="#1b4d3e" stroke-width="4" opacity="0.3"/>
+                        <path d="M110 240 C100 170, 125 110, 150 95 C175 110, 200 170, 190 240 Z" fill="#2e6f40" opacity="0.28"/>
+                    </svg>`;
+                }
+                if (type === 'sangeet') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
+                        <defs>
+                            <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#f3e8ff"/>
+                                <stop offset="100%" stop-color="#fce7f3"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="300" height="320" fill="url(#sg)"/>
+                        <circle cx="95" cy="130" r="52" fill="#9333ea" opacity="0.25"/>
+                        <circle cx="205" cy="145" r="58" fill="#ec4899" opacity="0.25"/>
+                        <path d="M70 250 Q150 120 230 250" fill="none" stroke="#7e22ce" stroke-width="14" opacity="0.22"/>
+                    </svg>`;
+                }
+                if (type === 'pheras') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
+                        <rect width="300" height="320" fill="#fdf0ed"/>
+                        <!-- Mandap Pillars & Arch -->
+                        <path d="M55 270 L55 100 Q150 40 245 100 L245 270" fill="none" stroke="#6e1f2f" stroke-width="12" opacity="0.25"/>
+                        <!-- Sacred Agni Fire -->
+                        <path d="M150 140 C175 180, 185 215, 150 235 C115 215, 125 180, 150 140 Z" fill="#ea580c" opacity="0.4"/>
+                        <path d="M150 165 C165 190, 170 212, 150 225 C130 212, 135 190, 150 165 Z" fill="#facc15" opacity="0.55"/>
+                    </svg>`;
+                }
+                // Mata Pujan default
+                return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320">
+                    <rect width="300" height="320" fill="#fbf5ea"/>
+                    <circle cx="150" cy="145" r="85" fill="#d4af37" opacity="0.22"/>
+                    <path d="M150 95 C170 130, 175 160, 150 180 C125 160, 130 130, 150 95 Z" fill="#d97706" opacity="0.35"/>
+                    <ellipse cx="150" cy="195" rx="55" ry="16" fill="#997a15" opacity="0.3"/>
+                </svg>`;
+            }
+
+            // Small Animated Event Icons (Inline SVG)
+            function getEventMiniIcon(type) {
+                switch (type) {
+                    case 'matapujan':
+                        return `<svg class="w-7 h-7 text-wine animate-pulse" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <path d="M16 5 C19 10, 20 14, 16 17 C12 14, 13 10, 16 5 Z" fill="#d4af37" stroke="none"/>
+                            <path d="M6 20 Q16 28 26 20 Z" fill="#6e1f2f"/>
+                            <line x1="10" y1="26" x2="22" y2="26" stroke="#d4af37" stroke-width="2"/>
+                        </svg>`;
+                    case 'haldi':
+                        return `<svg class="w-7 h-7 text-amber-600 animate-spin" style="animation-duration: 14s;" viewBox="0 0 32 32" fill="currentColor">
+                            <circle cx="16" cy="16" r="5" fill="#b45309"/>
+                            <circle cx="16" cy="7" r="4"/><circle cx="16" cy="25" r="4"/>
+                            <circle cx="7" cy="16" r="4"/><circle cx="25" cy="16" r="4"/>
+                            <circle cx="9.5" cy="9.5" r="3.5"/><circle cx="22.5" cy="22.5" r="3.5"/>
+                            <circle cx="22.5" cy="9.5" r="3.5"/><circle cx="9.5" cy="22.5" r="3.5"/>
+                        </svg>`;
+                    case 'mehendi':
+                        return `<svg class="w-7 h-7 text-emerald-800" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <path d="M10 26 V13 a2 2 0 0 1 4 0 V10 a2 2 0 0 1 4 0 V12 a2 2 0 0 1 4 0 V21 C22 25, 18 28, 14 28 C11 28, 10 27, 10 26 Z"/>
+                            <circle cx="16" cy="19" r="2.2" fill="#d4af37" stroke="none"/>
+                        </svg>`;
+                    case 'sangeet':
+                        return `<svg class="w-7 h-7 text-purple-800 animate-bounce" style="animation-duration: 2.2s;" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 23 V9 L24 6 V20"/>
+                            <circle cx="9.5" cy="23" r="3" fill="currentColor"/>
+                            <circle cx="21.5" cy="20" r="3" fill="currentColor"/>
+                        </svg>`;
+                    case 'pheras':
+                    default:
+                        return `<svg class="w-7 h-7 text-wine animate-pulse" viewBox="0 0 32 32" fill="none">
+                            <path d="M16 5 C21 12, 23 18, 16 23 C9 18, 11 12, 16 5 Z" fill="#ea580c"/>
+                            <path d="M16 11 C18.5 15, 19.5 18.5, 16 21.5 C12.5 18.5, 13.5 15, 16 11 Z" fill="#facc15"/>
+                            <rect x="8" y="24" width="16" height="3" rx="1.5" fill="#6e1f2f"/>
+                        </svg>`;
+                }
+            }
+
+            // -----------------------------------------------------------------
+            // 3. PRELOAD ALL ASSETS BEHIND THE LOADER
+            // -----------------------------------------------------------------
+            async function preloadAllAssets() {
+                const loaderBar = document.getElementById('loader-bar');
+                loaderBar.style.width = '30%';
+
+                // Generate cached PNGs from vector art once
+                const [rosePng, ganeshPng, marigoldPng, ...scenePngs] = await Promise.all([
+                    svgToPngDataUrl(buildRoseSVG(), 200, 200),
+                    svgToPngDataUrl(buildGaneshSVG(), 120, 120),
+                    svgToPngDataUrl(buildMarigoldSVG(), 40, 120),
+                    ...EVENTS_DATA.map((ev) => svgToPngDataUrl(buildSceneSVG(ev.sceneType), 300, 320))
+                ]);
+
+                Sprites.rose = rosePng;
+                Sprites.ganesh = ganeshPng;
+                Sprites.marigold = marigoldPng;
+                EVENTS_DATA.forEach((ev, idx) => {
+                    Sprites.scenes[ev.sceneType] = scenePngs[idx];
+                });
+
+                // Apply generated sprites across DOM
+                document.querySelectorAll('.rose-sprite-img').forEach((el) => (el.src = Sprites.rose));
+                document.querySelectorAll('.ganesh-sprite-img').forEach((el) => (el.src = Sprites.ganesh));
+                document.querySelectorAll('.marigold-sprite-img').forEach((el) => (el.src = Sprites.marigold));
+
+                loaderBar.style.width = '70%';
+
+                // Wait for Google Fonts & Story Photos (with graceful timeout so it never hangs)
+                const fontPromise = document.fonts ? document.fonts.ready : Promise.resolve();
+                const imagePromises = STORY_PHOTOS.map(
+                    (p) =>
+                        new Promise((res) => {
+                            const img = new Image();
+                            img.onload = res;
+                            img.onerror = res;
+                            img.src = p.url;
+                        })
+                );
+
+                await Promise.race([
+                    Promise.all([fontPromise, ...imagePromises]),
+                    new Promise((res) => setTimeout(res, 2400))
+                ]);
+
+                loaderBar.style.width = '100%';
+
+                setTimeout(() => {
+                    document.getElementById('loader-box').classList.add('hidden');
+                    document.getElementById('tap-open-btn').classList.remove('hidden');
+                }, 260);
+            }
+
+            // -----------------------------------------------------------------
+            // 4. PARTICLE SYSTEM (Petals on Book Open + Confetti on Scroll Reveal)
+            // -----------------------------------------------------------------
+            const ParticleFX = (() => {
+                const canvas = document.getElementById('fx-canvas');
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                let animId = null;
+
+                function resize() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                window.addEventListener('resize', resize, { passive: true });
+                resize();
+
+                function spawnPetals(count = 34) {
+                    const colors = ['#e899a8', '#d46a7e', '#f7cbd3', '#6e1f2f', '#f3e5ab'];
+                    for (let i = 0; i < count; i++) {
+                        particles.push({
+                            type: 'petal',
+                            x: Math.random() * canvas.width,
+                            y: -20 - Math.random() * canvas.height * 0.4,
+                            vx: (Math.random() - 0.5) * 1.8,
+                            vy: 1.5 + Math.random() * 2.2,
+                            size: 6 + Math.random() * 6,
+                            rot: Math.random() * Math.PI * 2,
+                            vRot: (Math.random() - 0.5) * 0.08,
+                            sway: Math.random() * 100,
+                            color: colors[Math.floor(Math.random() * colors.length)],
+                            alpha: 0.9
+                        });
+                    }
+                    start();
+                }
+
+                function spawnBurst(originX, originY, count = 48) {
+                    const colors = ['#d4af37', '#fcf6ba', '#6e1f2f', '#e899a8', '#b38728'];
+                    for (let i = 0; i < count; i++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const speed = 2.5 + Math.random() * 6.5;
+                        particles.push({
+                            type: i % 2 === 0 ? 'petal' : 'confetti',
+                            x: originX,
+                            y: originY,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed - 2.5,
+                            size: 5 + Math.random() * 5,
+                            rot: Math.random() * Math.PI * 2,
+                            vRot: (Math.random() - 0.5) * 0.16,
+                            sway: Math.random() * 50,
+                            color: colors[Math.floor(Math.random() * colors.length)],
+                            alpha: 1
+                        });
+                    }
+                    start();
+                }
+
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    for (let i = particles.length - 1; i >= 0; i--) {
+                        const p = particles[i];
+                        p.sway += 0.04;
+                        p.x += p.vx + Math.sin(p.sway) * 0.6;
+                        p.y += p.vy;
+                        if (p.type === 'confetti') {
+                            p.vy += 0.14; // Gravity
+                            p.vx *= 0.98;
+                        }
+                        p.rot += p.vRot;
+
+                        if (p.y > canvas.height - 90) {
+                            p.alpha -= 0.025;
+                        }
+
+                        if (p.alpha <= 0 || p.y > canvas.height + 30) {
+                            particles.splice(i, 1);
+                            continue;
+                        }
+
+                        ctx.save();
+                        ctx.globalAlpha = Math.max(0, p.alpha);
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate(p.rot);
+                        ctx.fillStyle = p.color;
+
+                        if (p.type === 'petal') {
+                            ctx.beginPath();
+                            ctx.moveTo(0, -p.size);
+                            ctx.bezierCurveTo(p.size, -p.size * 0.5, p.size, p.size * 0.8, 0, p.size);
+                            ctx.bezierCurveTo(-p.size, p.size * 0.8, -p.size, -p.size * 0.5, 0, -p.size);
+                            ctx.fill();
+                        } else {
+                            ctx.fillRect(-p.size * 0.6, -p.size * 0.35, p.size * 1.2, p.size * 0.7);
+                        }
+                        ctx.restore();
+                    }
+
+                    if (particles.length > 0) {
+                        animId = requestAnimationFrame(loop);
+                    } else {
+                        animId = null;
+                    }
+                }
+
+                function start() {
+                    if (!animId) {
+                        animId = requestAnimationFrame(loop);
+                    }
+                }
+
+                return { spawnPetals, spawnBurst };
+            })();
+
+            // -----------------------------------------------------------------
+            // 5. GENTLE SYNTHESIZED CHIME ON BOOK OPEN (Web Audio API - No External MP3)
+            // -----------------------------------------------------------------
+            function playGentleWelcomeChime() {
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioCtx) return;
+                    const ctx = new AudioCtx();
+                    // Warm Indian Tanpura / Sitar-inspired Major Pentatonic Chord (Sa Pa Ga Sa')
+                    const freqs = [261.63, 329.63, 392.00, 523.25];
+                    freqs.forEach((f, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(f, ctx.currentTime + idx * 0.16);
+
+                        gain.gain.setValueAtTime(0.0001, ctx.currentTime + idx * 0.16);
+                        gain.gain.exponentialRampToValueAtTime(0.045, ctx.currentTime + idx * 0.16 + 0.35);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.16 + 2.8);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(ctx.currentTime + idx * 0.16);
+                        osc.stop(ctx.currentTime + idx * 0.16 + 2.9);
+                    });
+                } catch (e) {
+                    // Fail silently if blocked by browser policy
+                }
+            }
+
+            // -----------------------------------------------------------------
+            // 6. OPENING 3D BOOK INTERACTION & PARALLAX
+            // -----------------------------------------------------------------
+            function initBookCover() {
+                const overlay = document.getElementById('book-overlay');
+                const bookStage = document.getElementById('book-stage');
+                const tapBtn = document.getElementById('tap-open-btn');
+                let isOpened = false;
+
+                // Subtle touch/pointer parallax on cover roses
+                overlay.addEventListener(
+                    'pointermove',
+                    (e) => {
+                        if (isOpened) return;
+                        const nx = (e.clientX / window.innerWidth - 0.5) * 30;
+                        const ny = (e.clientY / window.innerHeight - 0.5) * 30;
+                        overlay.querySelectorAll('[data-parallax]').forEach((el) => {
+                            const factor = parseFloat(el.dataset.parallax || '0.05');
+                            el.style.transform = `translate3d(${nx * factor * 10}px, ${ny * factor * 10}px, 0)`;
+                        });
+                    },
+                    { passive: true }
+                );
+
+                function openBook() {
+                    if (isOpened) return;
+                    isOpened = true;
+
+                    // 1. Swing cover open in 3D
+                    bookStage.classList.add('opened');
+                    playGentleWelcomeChime();
+
+                    // 2. Camera zooms into first page & petals fall
+                    setTimeout(() => {
+                        ParticleFX.spawnPetals(38);
+                        overlay.classList.add('zoom-out');
+                        document.body.classList.remove('book-locked');
+                        startHeroTypingAnimation();
+                    }, 780);
+
+                    // 3. Remove overlay from hit-testing after transition
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 1850);
+                }
+
+                bookStage.addEventListener('click', openBook);
+                tapBtn.addEventListener('click', openBook);
+                bookStage.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') openBook();
+                });
+            }
+
+            // -----------------------------------------------------------------
+            // 7. LETTER-BY-LETTER SOFT BLUR-IN TYPING ON FIRST PAGE
+            // -----------------------------------------------------------------
+            function prepareTypedText(elementId) {
+                const el = document.getElementById(elementId);
+                const text = el.textContent.trim();
+                el.innerHTML = '';
+                const spans = [];
+                for (const ch of text) {
+                    const span = document.createElement('span');
+                    span.className = 'char-reveal';
+                    span.textContent = ch === ' ' ? '\u00A0' : ch;
+                    el.appendChild(span);
+                    spans.push(span);
+                }
+                return spans;
+            }
+
+            function startHeroTypingAnimation() {
+                const groomSpans = prepareTypedText('groom-name-target');
+                const brideSpans = prepareTypedText('bride-name-target');
+
+                groomSpans.forEach((sp, i) => {
+                    setTimeout(() => sp.classList.add('visible'), 120 + i * 55);
+                });
+
+                const brideStart = 120 + groomSpans.length * 55 + 220;
+                brideSpans.forEach((sp, i) => {
+                    setTimeout(() => sp.classList.add('visible'), brideStart + i * 55);
+                });
+            }
+
+            // -----------------------------------------------------------------
+            // 8. SAVE THE DATE — PULL / TAP TASSEL SCROLL + COUNTDOWN + ICS
+            // -----------------------------------------------------------------
+            function initSaveTheDate() {
+                const handle = document.getElementById('scroll-handle');
+                const parchment = document.getElementById('scroll-parchment');
+                const pullHint = document.getElementById('pull-hint-label');
+                let isUnrolled = false;
+                let startY = 0;
+
+                function revealScroll() {
+                    if (isUnrolled) return;
+                    isUnrolled = true;
+                    parchment.classList.add('unrolled');
+                    if (pullHint) {
+                        pullHint.style.opacity = '0';
+                        pullHint.style.pointerEvents = 'none';
+                    }
+
+                    // Petal & Confetti Burst from scroll center
+                    const rect = handle.getBoundingClientRect();
+                    setTimeout(() => {
+                        ParticleFX.spawnBurst(rect.left + rect.width / 2, rect.top, 55);
+                    }, 350);
+                }
+
+                // Tap support
+                handle.addEventListener('click', revealScroll);
+
+                // Touch drag downward support
+                handle.addEventListener(
+                    'touchstart',
+                    (e) => {
+                        startY = e.touches[0].clientY;
+                    },
+                    { passive: true }
+                );
+
+                handle.addEventListener(
+                    'touchmove',
+                    (e) => {
+                        if (isUnrolled) return;
+                        const deltaY = e.touches[0].clientY - startY;
+                        if (deltaY > 10) {
+                            parchment.style.maxHeight = Math.min(deltaY * 2.2, 420) + 'px';
+                        }
+                        if (deltaY > 42) {
+                            parchment.style.maxHeight = '';
+                            revealScroll();
+                        }
+                    },
+                    { passive: true }
+                );
+
+                handle.addEventListener('touchend', () => {
+                    if (!isUnrolled) {
+                        parchment.style.maxHeight = '';
+                    }
+                });
+
+                // Live Countdown to Monday, 15 February 2027, 7:30 PM IST (+05:30)
+                const targetDate = new Date('2027-02-15T19:30:00+05:30').getTime();
+                const countdownEl = document.getElementById('live-countdown');
+
+                function updateCountdown() {
+                    const now = Date.now();
+                    const diff = Math.max(0, targetDate - now);
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hrs = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const mins = Math.floor((diff / 1000 / 60) % 60);
+                    const secs = Math.floor((diff / 1000) % 60);
+
+                    const pad = (n) => String(n).padStart(2, '0');
+                    countdownEl.textContent = `${days} days · ${pad(hrs)} hrs · ${pad(mins)} min · ${pad(secs)} sec`;
+                }
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+
+                // Add to Calendar (.ics download)
+                document.getElementById('add-calendar-btn').addEventListener('click', () => {
+                    const icsContent = [
+                        'BEGIN:VCALENDAR',
+                        'VERSION:2.0',
+                        'PRODID:-//Aarav and Ananya Wedding//EN',
+                        'BEGIN:VEVENT',
+                        'DTSTART:20270215T140000Z',
+                        'DTEND:20270215T180000Z',
+                        'SUMMARY:Aarav & Ananya Wedding (Pheras at 7:30 PM)',
+                        'DESCRIPTION:Together with their families, Aarav Mehta & Ananya Shah invite you to their wedding celebration.',
+                        'LOCATION:The St. Regis Mumbai, 462 Senapati Bapat Marg, Lower Parel, Mumbai, Maharashtra 400013',
+                        'END:VEVENT',
+                        'END:VCALENDAR'
+                    ].join('\r\n');
+
+                    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Aarav-Ananya-Wedding.ics';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showToast('Calendar invite downloaded');
+                });
+            }
+
+            // -----------------------------------------------------------------
+            // 9. REUSABLE 3D SWIPEABLE LOOPING CAROUSEL ENGINE
+            // -----------------------------------------------------------------
+            function create3DCarousel({ stageId, dotsId, items, renderCardHtml, cardWidth = 256, cardHeight = 350 }) {
+                const stage = document.getElementById(stageId);
+                const dotsContainer = document.getElementById(dotsId);
+                const total = items.length;
+                let activeIndex = 0;
+
+                // Build cards
+                const cardEls = items.map((item, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'carousel-card-item rounded-3xl overflow-hidden shadow-xl border border-champagne/65 bg-ivory';
+                    card.style.width = cardWidth + 'px';
+                    card.style.height = cardHeight + 'px';
+                    card.innerHTML = renderCardHtml(item, idx);
+                    card.addEventListener('click', () => {
+                        const rel = getRelativeOffset(idx, activeIndex, total);
+                        if (rel !== 0) {
+                            goTo(activeIndex + rel);
+                        }
+                    });
+                    stage.appendChild(card);
+                    return card;
+                });
+
+                // Build dots
+                const dotEls = items.map((_, idx) => {
+                    const dot = document.createElement('button');
+                    dot.setAttribute('aria-label', `Slide ${idx + 1}`);
+                    dot.className = 'h-2 rounded-full transition-all duration-300 bg-wine/25 w-2';
+                    dot.addEventListener('click', () => goTo(idx));
+                    dotsContainer.appendChild(dot);
+                    return dot;
+                });
+
+                function getRelativeOffset(index, current, len) {
+                    let diff = (index - current) % len;
+                    if (diff < -Math.floor(len / 2)) diff += len;
+                    if (diff > Math.floor(len / 2)) diff -= len;
+                    return diff;
+                }
+
+                function updateLayout() {
+                    cardEls.forEach((card, idx) => {
+                        const offset = getRelativeOffset(idx, activeIndex, total);
+                        if (offset === 0) {
+                            card.style.transform = 'translate3d(-50%, 0, 0) scale(1) rotateY(0deg)';
+                            card.style.opacity = '1';
+                            card.style.filter = 'blur(0px)';
+                            card.style.zIndex = '20';
+                            card.style.pointerEvents = 'auto';
+                        } else if (Math.abs(offset) === 1) {
+                            const dir = offset > 0 ? 1 : -1;
+                            card.style.transform = `translate3d(calc(-50% + ${dir * 138}px), 10px, -110px) scale(0.84) rotateY(${-dir * 18}deg)`;
+                            card.style.opacity = '0.72';
+                            card.style.filter = 'blur(2.5px)';
+                            card.style.zIndex = '10';
+                            card.style.pointerEvents = 'auto';
+                        } else {
+                            const dir = offset > 0 ? 1 : -1;
+                            card.style.transform = `translate3d(calc(-50% + ${dir * 190}px), 18px, -200px) scale(0.7) rotateY(${-dir * 25}deg)`;
+                            card.style.opacity = '0';
+                            card.style.filter = 'blur(4px)';
+                            card.style.zIndex = '1';
+                            card.style.pointerEvents = 'none';
+                        }
+                    });
+
+                    dotEls.forEach((dot, idx) => {
+                        if (idx === activeIndex) {
+                            dot.className = 'h-2 rounded-full transition-all duration-300 bg-wine w-6';
+                        } else {
+                            dot.className = 'h-2 rounded-full transition-all duration-300 bg-wine/25 w-2';
+                        }
+                    });
+                }
+
+                function goTo(newIdx) {
+                    activeIndex = ((newIdx % total) + total) % total;
+                    updateLayout();
+                }
+
+                // Touch & Mouse Swipe (Strictly one card per swipe)
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let isSwiping = false;
+
+                stage.addEventListener(
+                    'touchstart',
+                    (e) => {
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        isSwiping = true;
+                    },
+                    { passive: true }
+                );
+
+                stage.addEventListener(
+                    'touchend',
+                    (e) => {
+                        if (!isSwiping) return;
+                        isSwiping = false;
+                        const dx = e.changedTouches[0].clientX - touchStartX;
+                        const dy = e.changedTouches[0].clientY - touchStartY;
+                        if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy)) {
+                            if (dx < 0) goTo(activeIndex + 1);
+                            else goTo(activeIndex - 1);
+                        }
+                    },
+                    { passive: true }
+                );
+
+                updateLayout();
+                return { next: () => goTo(activeIndex + 1), prev: () => goTo(activeIndex - 1) };
+            }
+
+            // -----------------------------------------------------------------
+            // 10. INITIALIZE FESTIVITIES & OUR STORY CAROUSELS
+            // -----------------------------------------------------------------
+            function initCarousels() {
+                const eventsCarousel = create3DCarousel({
+                    stageId: 'events-carousel',
+                    dotsId: 'events-dots',
+                    items: EVENTS_DATA,
+                    cardWidth: 262,
+                    cardHeight: 356,
+                    renderCardHtml: (ev) => `
+                        <div class="relative w-full h-full flex flex-col justify-between p-5 text-center">
+                            <!-- Blurred Illustrated Scene Background -->
+                            <img src="${Sprites.scenes[ev.sceneType] || ''}" 
+                                 class="absolute inset-0 w-full h-full object-cover blur-[2px] opacity-85 pointer-events-none" 
+                                 alt="">
+                            <div class="absolute inset-0 bg-ivory/65 pointer-events-none"></div>
+
+                            <!-- Top Icon & Function Name -->
+                            <div class="relative z-10 flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-full bg-ivory/90 border border-champagne/70 shadow-sm flex items-center justify-center mb-2.5">
+                                    ${getEventMiniIcon(ev.sceneType)}
+                                </div>
+                                <h3 class="font-serif text-2xl font-bold text-wine leading-tight">${ev.name}</h3>
+                                <div class="w-10 h-[1px] bg-champagne my-2"></div>
+                            </div>
+
+                            <!-- Day, Time & Place -->
+                            <div class="relative z-10 space-y-1.5 my-auto">
+                                <p class="text-xs font-semibold text-wine tracking-wide">${ev.dayDate}</p>
+                                <p class="text-xs font-medium text-wine/85">${ev.time}</p>
+                                <p class="text-[11px] text-wine/75">${ev.place}</p>
+                            </div>
+
+                            <!-- Dress Code Row with Colour Swatch -->
+                            <div class="relative z-10 pt-2">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ivory/95 border border-champagne/60 shadow-sm">
+                                    <span class="w-3.5 h-3.5 rounded-full border border-wine/30 shrink-0" style="background: ${ev.swatch};"></span>
+                                    <span class="text-[11px] font-medium text-wine">${ev.dressCode} · ${ev.colourName}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                });
+
+                document.getElementById('prev-event-btn').addEventListener('click', eventsCarousel.prev);
+                document.getElementById('next-event-btn').addEventListener('click', eventsCarousel.next);
+
+                // Our Story 3D Photo Carousel
+                create3DCarousel({
+                    stageId: 'story-carousel',
+                    dotsId: 'story-dots',
+                    items: STORY_PHOTOS,
+                    cardWidth: 266,
+                    cardHeight: 382,
+                    renderCardHtml: (photo) => `
+                        <div class="w-full h-full flex flex-col bg-ivory p-2.5">
+                            <div class="relative w-full h-[285px] rounded-2xl overflow-hidden border border-champagne/40">
+                                <img src="${photo.url}" 
+                                     class="w-full h-full object-cover object-center" 
+                                     loading="lazy"
+                                     onerror="this.src='https://placehold.co/600x800/fcf4f4/6e1f2f?text=Aarav+%26+Ananya'"
+                                     alt="Aarav and Ananya">
+                            </div>
+                            <div class="flex-1 flex items-center justify-center px-2 pt-2 text-center">
+                                <p class="font-serif italic text-xs sm:text-[13px] text-wine leading-snug">
+                                    “${photo.caption}”
+                                </p>
+                            </div>
+                        </div>
+                    `
+                });
+            }
+
+            // -----------------------------------------------------------------
+            // 11. COPY ADDRESS & TOAST HELPER
+            // -----------------------------------------------------------------
+            function showToast(msg) {
+                const toast = document.getElementById('toast-msg');
+                toast.textContent = msg;
+                toast.style.opacity = '1';
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, 2400);
+            }
+
+            function initLocationActions() {
+                const copyBtn = document.getElementById('copy-address-btn');
+                const copyLabel = document.getElementById('copy-btn-text');
+
+                copyBtn.addEventListener('click', () => {
+                    // Use textarea + execCommand('copy') for reliable iFrame/mobile support
+                    const ta = document.createElement('textarea');
+                    ta.value = VENUE_ADDRESS;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try {
+                        document.execCommand('copy');
+                        copyLabel.textContent = 'Copied!';
+                        showToast('Venue address copied');
+                        setTimeout(() => {
+                            copyLabel.textContent = 'Copy address';
+                        }, 2000);
+                    } catch (err) {
+                        showToast('Unable to copy address');
+                    }
+                    document.body.removeChild(ta);
+                });
+            }
+
+            // -----------------------------------------------------------------
+            // 12. SCROLL PARALLAX (CORNER ROSES + SWINGING MARIGOLDS) & REVEALS
+            // -----------------------------------------------------------------
+            function initScrollEffects() {
+                const fixedRoses = document.querySelectorAll('.fixed-rose');
+                const marigoldStrands = document.querySelectorAll('.marigold-strand');
+                let lastScrollY = window.scrollY;
+                let ticking = false;
+
+                function onScroll() {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            const currentY = window.scrollY;
+                            const delta = Math.max(-18, Math.min(18, currentY - lastScrollY));
+                            lastScrollY = currentY;
+
+                            // Parallax corner roses
+                            fixedRoses.forEach((rose) => {
+                                const speed = parseFloat(rose.dataset.scrollSpeed || '0.05');
+                                const yShift = Math.sin(currentY * 0.004) * 14 + currentY * speed * 0.12;
+                                rose.style.marginTop = `${yShift}px`;
+                            });
+
+                            // Swing hanging marigold strings on scroll
+                            marigoldStrands.forEach((strand) => {
+                                const mult = parseFloat(strand.dataset.swing || '1');
+                                const angle = Math.sin(currentY * 0.025) * 6 * mult + delta * 0.35 * mult;
+                                strand.style.transform = `rotate(${angle.toFixed(1)}deg)`;
+                            });
+
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }
+
+                window.addEventListener('scroll', onScroll, { passive: true });
+
+                // IntersectionObserver for soft blur-in text blocks & pausing off-screen animations
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('in-view');
+                            }
+                        });
+                    },
+                    { threshold: 0.14 }
+                );
+
+                document.querySelectorAll('.reveal-block').forEach((el) => observer.observe(el));
+            }
+
+            // -----------------------------------------------------------------
+            // 13. BOOTSTRAP APPLICATION
+            // -----------------------------------------------------------------
+            window.addEventListener('DOMContentLoaded', async () => {
+                initBookCover();
+                initSaveTheDate();
+                initLocationActions();
+                initScrollEffects();
+                await preloadAllAssets();
+                initCarousels();
+            });
+        })();
+    </script>
+</body>
+</html>
